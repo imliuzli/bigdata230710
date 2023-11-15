@@ -1,4 +1,4 @@
-package com.atguigu.springbootdemo.bean;
+package com.atguigu.springbootdemo.customer.bean;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

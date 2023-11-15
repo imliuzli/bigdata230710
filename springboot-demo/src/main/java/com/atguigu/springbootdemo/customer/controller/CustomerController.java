@@ -1,8 +1,12 @@
-package com.atguigu.springbootdemo.controller;
+package com.atguigu.springbootdemo.customer.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.atguigu.springbootdemo.bean.Customer;
+import com.atguigu.springbootdemo.customer.bean.Customer;
+import com.atguigu.springbootdemo.customer.service.CustomerService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author imliuzli
@@ -20,6 +24,80 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class CustomerController {
     public static final String SUCCESS = "success";
+
+    @Autowired
+    CustomerService customerService;
+
+    /**
+     * SQL注入
+     *
+     * 客户端请求: localhost:8080/get?username=zhangsan&age=25
+     */
+    @GetMapping("/get")
+    public List<Customer> get(
+            @RequestParam(value = "username",required = false) String username,
+            @RequestParam(value = "age",required = false) Integer age){
+        List<Customer> customerList = customerService.getCustomerList(username, age);
+        return customerList;
+    }
+
+    /**
+     * 删除Customer
+     *
+     * 客户端请求 : localhost:8080/deletecustomer/1011
+     */
+    @GetMapping("/deletecustomer/{id}")
+    public String deleteCustomer(@PathVariable("id") Integer id){
+        // 调用业务层的组件
+        // 我们自己的方法
+        // customerService.deleteCustomer(id);
+        customerService.removeById(id);
+        return SUCCESS;
+    }
+
+    /**
+     * 修改Customer
+     *
+     * 客户端请求 : localhost:8080/updatecustomer
+     */
+    @PostMapping("/updatecustomer")
+    public String updateCustomer(@RequestBody Customer customer){
+        // 调用业务层组件
+        // 我们自己的方法
+        // customerService.updateCustomer(customer);
+        customerService.updateById(customer);
+        return SUCCESS;
+    }
+
+    /**
+     * 新增Customer
+     *
+     * 客户端的请求 : localhost:8080/savecustomer
+     */
+    @PostMapping("/savecustomer")
+    public String saveCustomer( @RequestBody Customer customer ){
+        // 调用业务层足组件
+        // 我们自己的方法
+        // customerService.saveCustomer(customer);
+        // MP的方法
+        customerService.save(customer);
+
+        return SUCCESS ;
+    }
+
+    /**
+     * 查询Customer对象
+     *
+     * 客户端请求: localhost:8080/getcustomer/1001
+     */
+    @GetMapping ("/getcustomer/{id}")
+    public Customer getCustomer(@PathVariable("id") Integer id){
+        // 调用业务层足组件
+        // 我们自己的方法
+        // Customer customer = customerService.getCustomer(id);
+        Customer customer = customerService.getById(id);
+        return customer;
+    }
 
     /**
      * 状态码 :
