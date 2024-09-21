@@ -210,7 +210,6 @@ public class CustomerController {
      */
     @RequestMapping(value="/hello")
     public String hello(){
-
         return SUCCESS ;
     }
 }
